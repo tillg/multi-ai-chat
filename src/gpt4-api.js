@@ -109,9 +109,8 @@ export const generateText = async (conversation, model, apiKey, isChatModel) => 
     }
 };
 
-
 export const getAvailableModels = async () => {
-    log('Getting available models', 'getAvailableModels')
+    console.log(`Getting available models ${API_KEY}`, 'getAvailableModels')
     try {
         const response = await axios.get(API_MODELS_URL, {
             headers: {
