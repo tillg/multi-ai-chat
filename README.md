@@ -2,12 +2,21 @@
 
 A chat application that allows users to chat with multiple AIs in order to compare their results.
 
+## Running the app
+
+First get an OpenAI API key [here](https://platform.openai.com/account/api-keys). Then make a `.env` file liek so:
+
+```bash
+REACT_APP_OPENAI_API_KEY=<Your API key>
+```
+
+Call it with `source .env` and then run the app with `npm start`.
+
 ## Reading 
 
 ### API Usage
 
 * [Check OpenAI token usage on the dashboard](https://platform.openai.com/account/usage)
-
 
 ## Available Scripts
 
@@ -38,4 +47,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## To Do
 
+* Store the mnodels and store in the list wether they are conversational or not
 * Refactor `gpt4-api.js`, the code is uggly!

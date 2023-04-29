@@ -29,11 +29,9 @@ const GPT4Interaction = () => {
     const getToggleOpen = (index) => { return () => toggleOpen(index) }
 
     const toggleOpen = (index) => {
-        console.log("toggleOpen(Index): ", index)
         if (!index) return
         const newConversation = [...conversation];
         newConversation[index].open = !newConversation[index].open;
-        console.log("newConversation: ", newConversation)
         setConversation(newConversation);
     }
 
@@ -43,7 +41,6 @@ const GPT4Interaction = () => {
             const selectedModel = availableModels.find((m) => m.id === model);
             const conversationWithPrompt = [...conversation, { role: "user", content: prompt }];
             setConversation(conversationWithPrompt);
-            // console.log("conversationWithPrompt", conversationWithPrompt)
             const generatedAnswer = await generateText(conversationWithPrompt, model, selectedModel.isChatModel);
             setConversation([...conversationWithPrompt, { role: "assistant", content: generatedAnswer.content, fullResponse: generatedAnswer }]);
             setPrompt('');

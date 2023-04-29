@@ -4,7 +4,7 @@ const COMPLETION_API_URL = 'https://api.openai.com/v1/completions';
 const CHAT_API_URL = 'https://api.openai.com/v1/chat/completions';
 const API_MODELS_URL = 'https://api.openai.com/v1/engines';
 
-const API_KEY = process.env.REACT_APP_GPT4_API_KEY;
+const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 const MAX_TOKENS = 100
 
 export const generateText = async (conversation, model, apiKey, isChatModel) => {
