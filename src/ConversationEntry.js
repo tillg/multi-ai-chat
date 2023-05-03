@@ -6,7 +6,7 @@ const ConversationEntryFullResponse = (entry, index, toggleOpen) => {
     const isOpen = entry.open
     if (entry.fullResponse) {
         const model = entry.fullResponse.model
-        const JsonStr = JSON.stringify(entry.fullResponse, null, 2)
+        const JsonStr = JSON.stringify(entry.fullResponse.fullResponse, null, 2)
         return (
             <div>
                 <button className="full-width-button" onClick={toggleOpen}>

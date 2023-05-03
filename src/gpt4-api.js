@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { knownModels } from './OpenAiModels';
 
 const COMPLETION_API_URL = 'https://api.openai.com/v1/completions';
 const CHAT_API_URL = 'https://api.openai.com/v1/chat/completions';
@@ -7,10 +8,12 @@ const API_MODELS_URL = 'https://api.openai.com/v1/engines';
 const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 const MAX_TOKENS = 100
 
-export const generateText = async (conversation, model, apiKey, isChatModel) => {
+let availableModels = []
+
+export const generateText = async (conversation, model, apiKey, isChatModel = true) => {
     const lastElement = conversation.length > 0 ? conversation[conversation.length - 1] : undefined;
     const prompt = lastElement ? lastElement.content : undefined;
-    log(`Generating text with model: ${model} for prompt ${prompt}`, 'generateText');
+    log(`Generating text with model: ${model.model_id} for prompt ${prompt}`, 'generateText');
 
     const requestOptions = {
         method: 'POST',
@@ -20,7 +23,7 @@ export const generateText = async (conversation, model, apiKey, isChatModel) => 
         },
         body: JSON.stringify({
             prompt: prompt,
-            model: model,
+            model: model.model_id,
             max_tokens: MAX_TOKENS,
             n: 1,
             stop: null,
@@ -110,7 +113,8 @@ export const generateText = async (conversation, model, apiKey, isChatModel) => 
 };
 
 export const getAvailableModels = async () => {
-    console.log(`Getting available models ${API_KEY}`, 'getAvailableModels')
+    if (availableModels.length > 0) return availableModels;
+
     try {
         const response = await axios.get(API_MODELS_URL, {
             headers: {
@@ -118,12 +122,30 @@ export const getAvailableModels = async () => {
                 'Authorization': `Bearer ${API_KEY}`,
             },
         });
-        const modelList = response.data.data.map((model) => ({
-            id: model.id,
+        const allModels = response.data.data.map((model) => ({
+            model_id: model.id,
             isChatModel: model.usage && model.usage.endpoints && model.usage.endpoints.includes('v1/chat/completions'),
         }));
-        // return the sorted modelList
-        return modelList.sort((a, b) => a.id.localeCompare(b.id));
+
+        const modelsWithDescriptions = allModels.map((model) => {
+            const knownModel = knownModels.find((known) => known.model_id === model.model_id);
+
+            if (knownModel) {
+                return {
+                    ...model,
+                    ...knownModel
+                };
+            } else {
+                return {
+                    ...model,
+                    description: '-',
+                };
+            }
+        });
+
+        availableModels = modelsWithDescriptions.sort((a, b) => a.model_id.localeCompare(b.model_id));
+        //console.log(availableModels)
+        return availableModels;
 
     } catch (error) {
         log('Error fetching available models:' + error, 'getAvailableModels');

@@ -74,3 +74,12 @@
     background-color: grey;
     color: white;
 }
+
+.select-multiline {
+    font-size: 14px;
+    width: 200px;
+}
+
+.select-multiline-option {
+    white-space: pre-wrap;
+}

@@ -47,5 +47,9 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## To Do
 
+* Use A12 Widgets
+* Make parallel conversation
+* Ask for API Key if not found.
+* Check tokens vs rate limits so messages don't get too long
 * Store the mnodels and store in the list wether they are conversational or not
 * Refactor `gpt4-api.js`, the code is uggly!

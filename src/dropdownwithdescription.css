@@ -1,0 +1,35 @@
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f8f8f8;
+    /* Change the background color here */
+    padding: 20px;
+    border-radius: 4px;
+    outline: none;
+    width: 90%;
+    max-width: 900px;
+    max-height: 80%;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+    /* Add a light border here */
+}
+
+.option-item {
+    cursor: pointer;
+}
+
+.option-item:hover {
+    background-color: #f0f0f0;
+}
+
+.option-title,
+.option-description {
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.option-title {
+    font-weight: normal;
+}
