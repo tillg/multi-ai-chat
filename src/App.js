@@ -1,6 +1,5 @@
-// import logo from './logo.svg';
 import './App.css';
-import GPT4Interaction from './GPT4Interaction';
+import AiInteraction from './AiInteraction';
 import Log from './Log';
 import robots from './robots.png';
 
@@ -14,7 +13,7 @@ function App() {
         </h1>
       </header>
       <main>
-        <GPT4Interaction />
+        <AiInteraction />
       </main>
       <Log />
     </div>

@@ -1,11 +1,7 @@
-import axios from 'axios';
 import { models } from './OpenaiModels';
 import { endpoints } from './OpenaiEndpoints';
 
-// const COMPLETION_API_URL = 'https://api.openai.com/v1/completions';
-// const CHAT_API_URL = 'https://api.openai.com/v1/chat/completions';
 const OPENAI_API_BASE_URL = 'https://api.openai.com'
-const API_MODELS_URL = 'https://api.openai.com/v1/engines';
 
 const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 const MAX_TOKENS = 200
@@ -14,15 +10,15 @@ const TEMPERATURE = 0.7
 let availableModels = []
 
 const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey = API_KEY }) => {
-    if (prompt == undefined) {
+    if (prompt === undefined) {
         log("Error: Cannot use Completion Endpoint without prompt.", "buildRequestForCompletionEndpoint")
         return
     }
-    if (apiKey == undefined) {
+    if (apiKey === undefined) {
         log("Error: Cannot use Completion Endpoint without API Key.", "buildRequestForCompletionEndpoint")
         return
     }
-    if (model_id == undefined) {
+    if (model_id === undefined) {
         log("Error: Cannot use Completion Endpoint without model id.", "buildRequestForCompletionEndpoint")
         return
     }
@@ -47,15 +43,15 @@ const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey = API_KEY 
 
 
 const buildRequestForChatCompletionEndpoint = ({ messages, model_id, apiKey = API_KEY }) => {
-    if (messages == undefined) {
+    if (messages === undefined) {
         log("Error: Cannot use Completion Endpoint without messages.", "buildRequestForCompletionEndpoint")
         return
     }
-    if (apiKey == undefined) {
+    if (apiKey === undefined) {
         log("Error: Cannot use Completion Endpoint without API Key.", "buildRequestForCompletionEndpoint")
         return
     }
-    if (model_id == undefined) {
+    if (model_id === undefined) {
         log("Error: Cannot use Completion Endpoint without model id.", "buildRequestForCompletionEndpoint")
         return
     }

@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { generateText, getAvailableModels, log, separateModelEndpoint } from './OpenaiApi';
-import JSONDisplay from './JSONDisplay'
 import ConversationEntry from './ConversationEntry';
-import DropdownWithDescription from './DropDownWithDescription';
-import './GPT4Interaction.css';
-import MultilineDropdown from './MultilineDropdown';
+import './AiInteraction.css';
 
 
-const GPT4Interaction = () => {
+const AiInteraction = () => {
     const [prompt, setPrompt] = useState('');
     const [modelAndEndpoint, setModelAndEndpoint] = useState('');
     const [availableModels, setAvailableModels] = useState([]);
@@ -62,16 +59,8 @@ const GPT4Interaction = () => {
         // const model = availableModels.find((m) => m.model_id === model_id);
         setModelAndEndpoint(model_id);
     };
-    const options = [
-        { label: 'Option 1', description: 'This is the description for option 1' },
-        { label: 'Option 2', description: 'This is the description for option 2' },
-        { label: 'Option 3', description: 'This is the description for option 3' },
-    ];
     return (
         <div>
-            {/* <label htmlFor="model">Model:</label> */}
-            {/* <DropdownWithDescription title={"Select Model"} options={availableModels} passBackSelectedOption={handleModelChange} /> */}
-            {/* <MultilineDropdown title={"Select Model"} options={availableModels} passBackSelectedOption={handleModelChange} /> */}
             <select id="model" value={modelAndEndpoint} onChange={handleModelChange} className="select-multiline">
                 {availableModels.map((model_endpoint) => (
                     <option key={model_endpoint} value={model_endpoint} className="select-multiline-option">
@@ -101,4 +90,4 @@ const GPT4Interaction = () => {
     );
 };
 
-export default GPT4Interaction;
+export default AiInteraction;
