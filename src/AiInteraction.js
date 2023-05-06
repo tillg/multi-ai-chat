@@ -3,13 +3,14 @@ import { generateText, getAvailableModels, log, separateModelEndpoint } from './
 import ConversationEntry from './ConversationEntry';
 import './AiInteraction.css';
 import Prompt from './Prompt';
+import ModelSelector from './ModelSelector';
 
 
 const AiInteraction = () => {
     const [modelAndEndpoint, setModelAndEndpoint] = useState('');
     const [availableModels, setAvailableModels] = useState([]);
     const [conversation, setConversation] = useState([]);
-    const [promptIsActive, setPromptIsActive] = useState(true);
+    const [promptIsActive, setPromptIsActive] = useState(false);
 
     useEffect(() => {
         const fetchAvailableModels = async () => {
@@ -17,8 +18,6 @@ const AiInteraction = () => {
             try {
                 const models = await getAvailableModels();
                 log(`Available models: ${models.length}`, 'GPT4Interaction.useEffect.fetchAvailableModels');
-                // const modelsForDropDown = models.map((model) => { return { ...model, "value": model.model_id, "text": model.model_id, "description": model.description } });
-                // console.log(modelsForDropDown)
                 setAvailableModels(models);
                 setModelAndEndpoint(models[0]);
             } catch (error) {
@@ -55,39 +54,28 @@ const AiInteraction = () => {
         }
     };
 
-    const handleModelChange = (e) => {
-        const model_id = e.target.value;
-        // const model = availableModels.find((m) => m.model_id === model_id);
-        setModelAndEndpoint(model_id);
+    const handleModelChange = (newModel_id) => {
+        console.log(newModel_id)
+        if (newModel_id === "none") return
+        setModelAndEndpoint(newModel_id);
+        setPromptIsActive(true);
     };
     return (
         <div>
-            <select id="model" value={modelAndEndpoint} onChange={handleModelChange} className="select-multiline">
+            <ModelSelector models={availableModels} onSelect={handleModelChange} disabled={false} />
+            {/* <select id="model" value={modelAndEndpoint} onChange={handleModelChange} className="select-multiline">
                 {availableModels.map((model_endpoint) => (
                     <option key={model_endpoint} value={model_endpoint} className="select-multiline-option">
                         {model_endpoint}
                     </option>
                 ))}
-            </select>
-
-            <div className="conversation">
-                {conversation.map((entry, index) => ConversationEntry(entry, index, getToggleOpen(index)))}
+            </select> */}
+            <div>
+                <div className="conversation">
+                    {conversation.map((entry, index) => ConversationEntry(entry, index, getToggleOpen(index)))}
+                </div>
             </div>
             <Prompt onSubmit={handleSubmit} promptIsActive={promptIsActive} />
-            {/* <form onSubmit={handleSubmit}>
-                <br />
-                <textarea
-                    // type="text"
-                    id="prompt"
-                    value={prompt}
-                    placeholder="Enter your prompt here"
-                    onChange={(e) => setPrompt(e.target.value)}
-                    rows="5"
-                    cols="70"
-                />
-                {/* <br /> */}
-            {/* <button type="submit">➡️</button> */}
-            {/* </form> * /} */}
         </div >
     );
 };

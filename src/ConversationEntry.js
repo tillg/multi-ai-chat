@@ -1,6 +1,7 @@
 import React, { useState, Text } from 'react';
-import { JSONTree } from 'react-json-tree';
 
+const colors = ["blue", "darkred"]
+const regex = /\d+/;
 
 const ConversationEntryFullResponse = (entry, index, toggleOpen) => {
     const isOpen = entry.open
@@ -37,9 +38,14 @@ const ConversationEntryPrompt = (entry) => {
 }
 
 const ConversationEntryAnswer = (entry) => {
-    if (entry.role === "assistant") {
+    if (entry.role.includes("assistant")) {
+        const assistantNo = entry.role.match(regex);
+        const style = {
+            backgroundColor: colors[assistantNo]
+        }
+        console.log(style)
         return (
-            <div className="conversation-role-assistant">{entry.content}</div>
+            <div className="conversation-role-assistant" style={style}>{entry.fullResponse.fullResponse.model + ": " + entry.content}</div>
         )
     } else return ""
 }
@@ -52,7 +58,7 @@ const ConversationEntry = (entry, index, toggleOpen) => {
             {ConversationEntryPrompt(entry)}
             {ConversationEntryAnswer(entry)}
             {ConversationEntryError(entry)}
-            {ConversationEntryFullResponse(entry, index, toggleOpen)}
+            {/* {ConversationEntryFullResponse(entry, index, toggleOpen)} */}
         </div>
     );
 };
