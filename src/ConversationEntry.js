@@ -5,7 +5,7 @@ import { JSONTree } from 'react-json-tree';
 const ConversationEntryFullResponse = (entry, index, toggleOpen) => {
     const isOpen = entry.open
     if (entry.fullResponse) {
-        const model = entry.fullResponse.model
+        const model = entry.fullResponse.fullResponse.model
         const JsonStr = JSON.stringify(entry.fullResponse.fullResponse, null, 2)
         return (
             <div>

@@ -47,6 +47,7 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## To Do
 
+* When entering a new question, while the AI is thinking, deactivate the prompt field and the send button and show a loading indicator.
 * Use A12 Widgets
 * Make parallel conversation
 * Ask for API Key if not found.

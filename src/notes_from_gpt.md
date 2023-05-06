@@ -228,3 +228,42 @@ I have 2 arrays:
 - Array allModels that contains objects with a model_id but without a desciption
 - Array knownModels that contains objects with a model_id and descriptions - but not every model_id is in this array
 How can I add the descriptions to the allModels array?
+
+---------------------------------
+
+I have this array of strings:
+endpoints = [
+    "/v1/completions", "/v1/edits", "/v1/fine-tunes", "/v1/moderations", "/v1/embeddings", "/v1/audio/transcriptions", "/v1/audio/translations", "/v1/chat/completions"
+]
+
+Please  transform it to an array of objects with the following fields:
+- name
+- id
+- url: the string from the old array
+- description
+- mandatory_vars
+
+Can you please write out what this array looks like?
+
+------------------------
+I have an array like this:
+
+const endpoints = [
+    {
+        name: "Completions",
+        endpoint_id: "completions",
+        url: "/v1/completions",
+        description: "Text completions",
+        mandatory_vars: ["prompt", "model"],
+        supported: true,
+    },
+    {
+        name: "Edits",
+        endpoint_id: "edits",
+        url: "/v1/edits",
+        description: "Text editing",
+        mandatory_vars: ["text", "model"],
+    }]
+
+  How can I select the element with a certain ID?
+  

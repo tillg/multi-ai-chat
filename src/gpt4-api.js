@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { knownModels } from './OpenAiModels';
+import { models } from './OpenaiModels';
 
 const COMPLETION_API_URL = 'https://api.openai.com/v1/completions';
 const CHAT_API_URL = 'https://api.openai.com/v1/chat/completions';
@@ -128,7 +128,7 @@ export const getAvailableModels = async () => {
         }));
 
         const modelsWithDescriptions = allModels.map((model) => {
-            const knownModel = knownModels.find((known) => known.model_id === model.model_id);
+            const knownModel = models.find((known) => known.model_id === model.model_id);
 
             if (knownModel) {
                 return {
