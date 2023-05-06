@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { generateText, getAvailableModels, log, separateModelEndpoint } from './OpenaiApi';
-import ConversationEntry from './ConversationEntry';
 import './AiInteractionDouble.css';
 import Prompt from './Prompt';
 import ModelSelector from './ModelSelector';
@@ -29,15 +28,6 @@ const AiInteractionDouble = () => {
         fetchAvailableModels();
     }, []);
 
-    const getToggleOpen = (index) => { return () => toggleOpen(index) }
-
-    const toggleOpen = (index) => {
-        if (!index) return
-        const newConversation = [...conversation];
-        newConversation[index].open = !newConversation[index].open;
-        setConversation(newConversation);
-    }
-
     const extractConversation = (conversationNo, conversation) => {
         const conversationOfAssistant = conversation.filter((entry) => entry.role === "user" || entry.role === `assistant${conversationNo}`)
         const cleanedConversation = conversationOfAssistant.map((entry) => {
@@ -60,8 +50,11 @@ const AiInteractionDouble = () => {
             const endpoint_id0 = separateModelEndpoint(modelAndEndpoints[0]).endpoint_id
             const model_id1 = separateModelEndpoint(modelAndEndpoints[1]).model_id
             const endpoint_id1 = separateModelEndpoint(modelAndEndpoints[1]).endpoint_id
-            const generatedAnswer0 = await generateText({ conversation: extraxtedConversation0, model_id: model_id0, endpoint_id: endpoint_id0 });
-            const generatedAnswer1 = await generateText({ conversation: extraxtedConversation1, model_id: model_id1, endpoint_id: endpoint_id1 });
+
+            const [generatedAnswer0, generatedAnswer1] = await Promise.all([generateText({ conversation: extraxtedConversation0, model_id: model_id0, endpoint_id: endpoint_id0 }), generateText({ conversation: extraxtedConversation1, model_id: model_id1, endpoint_id: endpoint_id1 })])
+
+            // const generatedAnswer0 = await generateText({ conversation: extraxtedConversation0, model_id: model_id0, endpoint_id: endpoint_id0 });
+            // const generatedAnswer1 = await generateText({ conversation: extraxtedConversation1, model_id: model_id1, endpoint_id: endpoint_id1 });
             const conversationWithAnswers = [...conversationWithPrompt, { role: "assistant0", content: generatedAnswer0.content, fullResponse: generatedAnswer0 }, { role: "assistant1", content: generatedAnswer1.content, fullResponse: generatedAnswer1 }];
             setConversation(conversationWithAnswers);
             setPromptIsActive(true);
@@ -78,7 +71,6 @@ const AiInteractionDouble = () => {
         }
         const newModelAndEndpoints = [...modelAndEndpoints]
         newModelAndEndpoints[conversationNo] = newModel_id
-        console.log(newModelAndEndpoints)
         setModelAndEndpoints(newModelAndEndpoints);
         setPromptIsActive(true);
         newModelAndEndpoints.forEach(model => {

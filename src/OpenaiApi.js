@@ -3,11 +3,16 @@ import { endpoints } from './OpenaiEndpoints';
 
 const OPENAI_API_BASE_URL = 'https://api.openai.com'
 
-const API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
-const MAX_TOKENS = 200
+let API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+const MAX_TOKENS = 800
 const TEMPERATURE = 0.7
 
 let availableModels = []
+
+if (!API_KEY) {
+    const userInput = prompt("Please enter your OpenAI API key:", "sk-<your key here>");
+    API_KEY = userInput
+}
 
 const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey = API_KEY }) => {
     if (prompt === undefined) {

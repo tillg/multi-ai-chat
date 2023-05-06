@@ -1,4 +1,5 @@
-import React, { useState, Text } from 'react';
+import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 const colors = ["blue", "darkred"]
 const regex = /\d+/;
@@ -32,7 +33,7 @@ const ConversationEntryError = (entry) => {
 const ConversationEntryPrompt = (entry) => {
     if (entry.role === "user") {
         return (
-            <div className="conversation-role-user">{entry.content}</div>
+            <ReactMarkdown className="conversation-role-user" children={entry.content} />
         )
     } else return ""
 }
@@ -43,9 +44,10 @@ const ConversationEntryAnswer = (entry) => {
         const style = {
             backgroundColor: colors[assistantNo]
         }
-        console.log(style)
         return (
-            <div className="conversation-role-assistant" style={style}>{entry.fullResponse.fullResponse.model + ": " + entry.content}</div>
+            <div style={style} className="conversation-role-assistant" >
+                <ReactMarkdown children={"**" + entry.fullResponse.fullResponse.model + "**: " + entry.content} />
+            </div>
         )
     } else return ""
 }
