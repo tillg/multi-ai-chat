@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { generateText, getAvailableModels, log, separateModelEndpoint } from './OpenaiApi';
 import ConversationEntry from './ConversationEntry';
 import './AiInteraction.css';
+import Prompt from './Prompt';
 
 
 const AiInteraction = () => {
-    const [prompt, setPrompt] = useState('');
     const [modelAndEndpoint, setModelAndEndpoint] = useState('');
     const [availableModels, setAvailableModels] = useState([]);
     const [conversation, setConversation] = useState([]);
+    const [promptIsActive, setPromptIsActive] = useState(true);
 
     useEffect(() => {
         const fetchAvailableModels = async () => {
@@ -37,10 +38,10 @@ const AiInteraction = () => {
         setConversation(newConversation);
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmit = async (prompt) => {
+        // e.preventDefault();
         try {
-            // const selectedModel = availableModels.find((m) => m.id === model);
+            setPromptIsActive(false);
             const selectedModelAndEndpoint = separateModelEndpoint(modelAndEndpoint)
             const model_id = selectedModelAndEndpoint.model_id;
             const endpoint_id = selectedModelAndEndpoint.endpoint_id;
@@ -48,7 +49,7 @@ const AiInteraction = () => {
             setConversation(conversationWithPrompt);
             const generatedAnswer = await generateText({ conversation: conversationWithPrompt, model_id, endpoint_id });
             setConversation([...conversationWithPrompt, { role: "assistant", content: generatedAnswer.content, fullResponse: generatedAnswer }]);
-            setPrompt('');
+            setPromptIsActive(true);
         } catch (error) {
             log(`Error generating text: ${error}`, 'GPT4Interaction.handleSubmit');
         }
@@ -72,7 +73,8 @@ const AiInteraction = () => {
             <div className="conversation">
                 {conversation.map((entry, index) => ConversationEntry(entry, index, getToggleOpen(index)))}
             </div>
-            <form onSubmit={handleSubmit}>
+            <Prompt onSubmit={handleSubmit} promptIsActive={promptIsActive} />
+            {/* <form onSubmit={handleSubmit}>
                 <br />
                 <textarea
                     // type="text"
@@ -84,9 +86,9 @@ const AiInteraction = () => {
                     cols="70"
                 />
                 {/* <br /> */}
-                <button type="submit">➡️</button>
-            </form>
-        </div>
+            {/* <button type="submit">➡️</button> */}
+            {/* </form> * /} */}
+        </div >
     );
 };
 
