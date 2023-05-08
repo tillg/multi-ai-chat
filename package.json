@@ -1,5 +1,6 @@
 {
-  "name": "gpt4-client",
+  "name": "ai-chat",
+  "homepage": "/ai-chat",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

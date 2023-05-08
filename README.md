@@ -49,8 +49,5 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 * See the result as it comes in from the AI.
 * Use A12 Widgets
-* Make parallel conversation
-* Ask for API Key if not found.
+* Ability to enter specific configurations (i.e. being able to compare GPT-4 with temperature 0 vs temperature 1)
 * Check tokens vs rate limits so messages don't get too long
-* Store the mnodels and store in the list wether they are conversational or not
-* Refactor `gpt4-api.js`, the code is uggly!
