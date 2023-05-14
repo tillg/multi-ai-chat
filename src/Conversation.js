@@ -1,6 +1,6 @@
 import React from 'react';
 import { Icon } from "@com.mgmtp.a12.widgets/widgets-core/lib/icon";
-import { Comment, CommentList } from "@com.mgmtp.a12.widgets/widgets-core/lib/comment";
+import { CommentList } from "@com.mgmtp.a12.widgets/widgets-core/lib/comment";
 import { MarkdownComment } from './MarkdownComment';
 import { ThemeProvider } from "styled-components";
 import { flatTheme } from "@com.mgmtp.a12.widgets/widgets-core/lib/theme/flat/flat-theme";
@@ -12,8 +12,8 @@ const Conversation = ({ conversation }) => {
 
     const createComment = (entry, index) => {
         let author
-        if (entry.fullResponse && entry.fullResponse.fullResponse) {
-            author = entry.role === "user" ? "User" : entry.fullResponse.fullResponse.model
+        if (entry.fullResponse && entry.fullResponse.model) {
+            author = entry.role === "user" ? "User" : entry.fullResponse.model
         } else {
             author = entry.role === "user" ? "User" : "???"
         }

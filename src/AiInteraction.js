@@ -44,22 +44,41 @@ const AiInteraction = () => {
     }
     const updateLastAnswer = async (answer, conversationNo, isFinal, xhr) => {
         setConversation(conversation => {
-            console.log(`updateLastAnswer`, answer, conversationNo, "Length of conversation: ", conversation.length, "xhr.data", xhr.response)
+            // console.log(`updateLastAnswer`, answer, conversationNo, "Length of conversation: ", conversation.length, "xhr.data", xhr.response)
             if (conversation.length === 0) return
             let i = conversation.length - 1
             let conversationWithUpdatedLastAnswer = [...conversation]
             while (i >= 0) {
                 if (conversation[i].role === `assistant${conversationNo}`) {
                     conversationWithUpdatedLastAnswer[i].content = answer;
-                    const jsonString = xhr.response
-                    try {
-                        const data = JSON.parse(jsonString);
-                        conversationWithUpdatedLastAnswer[i].fullResponse = data;
-                    }
-                    catch (error) {
-                        console.log("updateLastAnswer", "Error parsing JSON: ", jsonString)
-                        console.log(error)
-                    }
+                    const dataString = xhr.response
+
+                    // Coide snippet copied from here:
+                    //   https://github.com/justinmahar/openai-ext/blob/master/src/OpenAIExt.ts
+                    const dataPrefix = 'data: ';
+                    const doneData = `${dataPrefix}[DONE]`;
+                    const isFinal = dataString.includes(doneData);
+                    const dataJsonLines = dataString
+                        .split(doneData)
+                        .join('')
+                        .trim()
+                        .split(dataPrefix)
+                        .filter((v) => !!v); // Remove empty lines
+                    const fullResponseSnippets = dataJsonLines.map((dataJson) => {
+                        try {
+                            const parsed = JSON.parse(dataJson);
+                            if (parsed.error) {
+                                throw new Error(JSON.stringify(parsed.error));
+                            } else {
+                                return parsed
+                            }
+                        } catch (e) {
+                            console.error(e);
+                            console.error(`Bad data JSON: \`${dataJson}\``);
+                        }
+                    });
+                    const fullResponse = fullResponseSnippets[0];
+                    conversationWithUpdatedLastAnswer[i].fullResponse = fullResponse;
                     break;
                 }
                 i--;
@@ -75,7 +94,7 @@ const AiInteraction = () => {
                 updateLastAnswer(content, conversationNo, isFinal, xhr)
             },
             onDone(xhr) {
-                console.log("Done!");
+                // console.log("Done!");
             },
             onError(error, status, xhr) {
                 console.error(error);

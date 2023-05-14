@@ -167,7 +167,7 @@ const generateTextWithoutHandler = async ({ conversation, model_id, apiKey, endp
     }
 
     try {
-        console.log(JSON.stringify(requestOptions))
+        // console.log(JSON.stringify(requestOptions))
         const response = await fetch(requestUrl, requestOptions);
         const data = await response.json();
 
@@ -175,7 +175,7 @@ const generateTextWithoutHandler = async ({ conversation, model_id, apiKey, endp
             log(`Error: ${Error(data.error.message)}`, 'generateText')
             throw new Error(data.error.message);
         }
-        console.log(data)
+        // console.log(data)
         answer.content = extractor(data)
         answer.fullResponse = data
         //console.log(answer)
@@ -208,12 +208,12 @@ export const getAvailableModels = async () => {
                     const modelEndpoint = combineModelEndpoint(model.model_id, endpoint_id)
                     availableModels.push(modelEndpoint)
                 } else {
-                    console.log(`Endpoint ${endpoint_id} is not supported (yet).`)
+                    console.error(`Endpoint ${endpoint_id} is not supported (yet).`)
                 }
             })
         }
     })
-    console.log(availableModels)
+    // console.log(availableModels)
     return availableModels;
 };
 
