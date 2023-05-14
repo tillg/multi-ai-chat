@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { generateText, getAvailableModels, log, separateModelEndpoint } from './OpenaiApi';
+import { generateText, getAvailableModels, separateModelEndpoint } from './OpenaiApi';
 import './AiInteraction.css';
 import Prompt from './Prompt';
 import ModelSelector from './ModelSelector';
@@ -14,14 +14,14 @@ const AiInteraction = () => {
 
     useEffect(() => {
         const fetchAvailableModels = async () => {
-            log('Fetching models...', 'GPT4Interaction.useEffect.fetchAvailableModels')
+            // console.log('GPT4Interaction.useEffect.fetchAvailableModels', 'Fetching models...')
             try {
                 const models = await getAvailableModels();
-                log(`Available models: ${models.length}`, 'GPT4Interaction.useEffect.fetchAvailableModels');
+                // console.log('GPT4Interaction.useEffect.fetchAvailableModels', `Available models: ${models.length}`);
                 setAvailableModels(models);
                 // setModelAndEndpoints(models[0]);
             } catch (error) {
-                log(`Error fetching available models:  ${error}`, 'GPT4Interaction.useEffect.fetchAvailableModels');
+                console.error(`Error fetching available models:  ${error}`);
             }
         };
 
@@ -57,7 +57,6 @@ const AiInteraction = () => {
                     //   https://github.com/justinmahar/openai-ext/blob/master/src/OpenAIExt.ts
                     const dataPrefix = 'data: ';
                     const doneData = `${dataPrefix}[DONE]`;
-                    const isFinal = dataString.includes(doneData);
                     const dataJsonLines = dataString
                         .split(doneData)
                         .join('')
@@ -65,17 +64,17 @@ const AiInteraction = () => {
                         .split(dataPrefix)
                         .filter((v) => !!v); // Remove empty lines
                     const fullResponseSnippets = dataJsonLines.map((dataJson) => {
+                        let parsed
                         try {
-                            const parsed = JSON.parse(dataJson);
+                            parsed = JSON.parse(dataJson);
                             if (parsed.error) {
                                 throw new Error(JSON.stringify(parsed.error));
-                            } else {
-                                return parsed
                             }
                         } catch (e) {
                             console.error(e);
                             console.error(`Bad data JSON: \`${dataJson}\``);
                         }
+                        return parsed
                     });
                     const fullResponse = fullResponseSnippets[0];
                     conversationWithUpdatedLastAnswer[i].fullResponse = fullResponse;
@@ -125,7 +124,7 @@ const AiInteraction = () => {
             setConversation(conversationWithAnswers);
             setPromptIsActive(true);
         } catch (error) {
-            log(`Error generating text: ${error}`, 'GPT4Interaction.handleSubmit');
+            console.error(`Error generating text: ${error}`);
         }
     };
 

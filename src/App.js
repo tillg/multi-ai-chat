@@ -1,6 +1,5 @@
 import './App.css';
 import AiInteraction from './AiInteraction';
-import Log from './Log';
 import robots from './robots.png';
 
 function App() {
@@ -15,7 +14,7 @@ function App() {
       <main>
         <AiInteraction />
       </main>
-      <Log />
+
     </div>
   );
 }

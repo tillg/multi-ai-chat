@@ -17,15 +17,15 @@ if (!API_KEY) {
 
 const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey }) => {
     if (prompt === undefined) {
-        log("Error: Cannot use Completion Endpoint without prompt.", "buildRequestForCompletionEndpoint")
+        console.error("Error: Cannot use Completion Endpoint without prompt.")
         return
     }
     if (apiKey === undefined) {
-        log("Error: Cannot use Completion Endpoint without API Key.", "buildRequestForCompletionEndpoint")
+        console.error("Error: Cannot use Completion Endpoint without API Key.")
         return
     }
     if (model_id === undefined) {
-        log("Error: Cannot use Completion Endpoint without model id.", "buildRequestForCompletionEndpoint")
+        console.error("Error: Cannot use Completion Endpoint without model id.")
         return
     }
 
@@ -50,15 +50,15 @@ const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey }) => {
 
 const buildRequestForChatCompletionEndpoint = ({ messages, model_id, apiKey }) => {
     if (messages === undefined) {
-        log("Error: Cannot use Completion Endpoint without messages.", "buildRequestForCompletionEndpoint")
+        console.error("Error: Cannot use Completion Endpoint without messages.", "buildRequestForCompletionEndpoint")
         return
     }
     if (apiKey === undefined) {
-        log("Error: Cannot use Completion Endpoint without API Key.", "buildRequestForCompletionEndpoint")
+        console.error("Error: Cannot use Completion Endpoint without API Key.", "buildRequestForCompletionEndpoint")
         return
     }
     if (model_id === undefined) {
-        log("Error: Cannot use Completion Endpoint without model id.", "buildRequestForCompletionEndpoint")
+        console.error("Error: Cannot use Completion Endpoint without model id.", "buildRequestForCompletionEndpoint")
         return
     }
 
@@ -94,7 +94,7 @@ export const generateText = async ({ conversation, model_id, apiKey = API_KEY, e
 const generateTextWithHandler = async ({ conversation, model_id, apiKey, endpoint_id, handler }) => {
     if (endpoint_id !== "chat_completions") {
         const errorText = `Endpoint ${endpoint_id} is not supported with handlers.`
-        log(`Error: ${errorText}`, "generateText")
+        console.error("generateText", errorText)
         throw new Error(errorText);
     }
     const streamConfig = {
@@ -158,7 +158,7 @@ const generateTextWithoutHandler = async ({ conversation, model_id, apiKey, endp
             }
         default:
             const errorText = `Endpoint ${endpoint_id} is not supported (yet).`
-            log(`Error: ${errorText}`, "generateText")
+            console.error("generateTextWithoutHandler", `Error: ${errorText}`)
             throw new Error(errorText);
     }
 
@@ -172,7 +172,7 @@ const generateTextWithoutHandler = async ({ conversation, model_id, apiKey, endp
         const data = await response.json();
 
         if (!response.ok) {
-            log(`Error: ${Error(data.error.message)}`, 'generateText')
+            console.error('generateTextWithoutHandler', `Error: ${Error(data.error.message)}`)
             throw new Error(data.error.message);
         }
         // console.log(data)
@@ -182,7 +182,7 @@ const generateTextWithoutHandler = async ({ conversation, model_id, apiKey, endp
         return answer;
 
     } catch (error) {
-        log('Error generating text:' + error.message, 'generateText')
+        console.error('generateTextWithoutHandler', 'Error generating text:' + error.message)
         throw error;
     }
 };
@@ -217,10 +217,10 @@ export const getAvailableModels = async () => {
     return availableModels;
 };
 
-export const log = (logMessage, functionName) => {
-    if (logMessage.toUpperCase().includes("ERROR")) {
-        console.error(logMessage)
-    }
-    const event = new CustomEvent('log', { detail: { message: logMessage, functionName } });
-    window.dispatchEvent(event);
-};
+// export const log = (logMessage, functionName) => {
+//     if (logMessage.toUpperCase().includes("ERROR")) {
+//         console.error(logMessage)
+//     }
+//     const event = new CustomEvent('log', { detail: { message: logMessage, functionName } });
+//     window.dispatchEvent(event);
+// };
