@@ -180,43 +180,6 @@ export const getAvailableModels = async () => {
     })
     console.log(availableModels)
     return availableModels;
-    /* 
-            const response = await axios.get(API_MODELS_URL, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${API_KEY}`,
-                },
-            });
-            const allModels = response.data.data.map((model) => ({
-                model_id: model.id,
-                isChatModel: model.usage && model.usage.endpoints && model.usage.endpoints.includes('v1/chat/completions'),
-            }));
-    
-            const modelsWithDescriptions = allModels.map((model) => {
-                const knownModel = models.find((known) => known.model_id === model.model_id);
-    
-                if (knownModel) {
-                    return {
-                        ...model,
-                        ...knownModel
-                    };
-                } else {
-                    return {
-                        ...model,
-                        description: '-',
-                    };
-                }
-            });
-    
-            availableModels = modelsWithDescriptions.sort((a, b) => a.model_id.localeCompare(b.model_id));
-            //console.log(availableModels)
-            return availableModels;
-    
-        } catch (error) {
-            log('Error fetching available models:' + error, 'getAvailableModels');
-            throw error;
-    } 
-         */
 };
 
 export const log = (logMessage, functionName) => {

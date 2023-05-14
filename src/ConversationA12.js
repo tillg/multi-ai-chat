@@ -4,7 +4,7 @@ import { Comment, CommentList } from "@com.mgmtp.a12.widgets/widgets-core/lib/co
 import { ThemeProvider } from "styled-components";
 import { flatTheme } from "@com.mgmtp.a12.widgets/widgets-core/lib/theme/flat/flat-theme";
 import "@com.mgmtp.a12.widgets/widgets-core/lib/theme/basic.css";
-const colors = ["lightblue", "red"]
+const colors = ["#99ccff", "#ff9999"]
 const regex = /\d+/;
 
 const Conversation = ({ conversation }) => {
@@ -16,7 +16,8 @@ const Conversation = ({ conversation }) => {
         const assistantNo = entry.role.match(regex);
         const commentStyle = {
             flex: 1,
-            backgroundColor: colors[assistantNo]
+            backgroundColor: colors[assistantNo],
+            textAlign: 'left'
         }
         const commentMeta = {
             avatar: <Icon>{icon}</Icon>,
