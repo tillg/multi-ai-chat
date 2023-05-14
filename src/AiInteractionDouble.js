@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { generateText, getAvailableModels, log, separateModelEndpoint } from './OpenaiApi';
 import './AiInteractionDouble.css';
-import Prompt from './PromptA12';
+import Prompt from './Prompt';
 import ModelSelector from './ModelSelector';
-import Conversation from './ConversationA12';
+import Conversation from './Conversation';
 
 
 const AiInteractionDouble = () => {
