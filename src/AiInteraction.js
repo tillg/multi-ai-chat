@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { generateText, getAvailableModels, log, separateModelEndpoint } from './OpenaiApi';
-import './AiInteractionDouble.css';
+import './AiInteraction.css';
 import Prompt from './Prompt';
 import ModelSelector from './ModelSelector';
 import Conversation from './Conversation';
 
 
-const AiInteractionDouble = () => {
+const AiInteraction = () => {
     const [modelAndEndpoints, setModelAndEndpoints] = useState(["none", "none"]);
     const [availableModels, setAvailableModels] = useState([]);
     const [conversation, setConversation] = useState([]);
@@ -38,11 +38,58 @@ const AiInteractionDouble = () => {
         return cleanedConversation
     }
 
+    const addPreliminaryAnswers = (conversation) => {
+        const conversationWithPreliminaryAnswers = [...conversation, { role: "assistant0", content: "Thinking..." }, { role: "assistant1", content: "Thinking..." }];
+        return conversationWithPreliminaryAnswers
+    }
+    const updateLastAnswer = async (answer, conversationNo, isFinal, xhr) => {
+        setConversation(conversation => {
+            console.log(`updateLastAnswer`, answer, conversationNo, "Length of conversation: ", conversation.length, "xhr.data", xhr.response)
+            if (conversation.length === 0) return
+            let i = conversation.length - 1
+            let conversationWithUpdatedLastAnswer = [...conversation]
+            while (i >= 0) {
+                if (conversation[i].role === `assistant${conversationNo}`) {
+                    conversationWithUpdatedLastAnswer[i].content = answer;
+                    const jsonString = xhr.response
+                    try {
+                        const data = JSON.parse(jsonString);
+                        conversationWithUpdatedLastAnswer[i].fullResponse = data;
+                    }
+                    catch (error) {
+                        console.log("updateLastAnswer", "Error parsing JSON: ", jsonString)
+                        console.log(error)
+                    }
+                    break;
+                }
+                i--;
+            }
+            return conversationWithUpdatedLastAnswer
+        });
+    }
+
+    const createResponseStreamHandler = (conversationNo) => {
+
+        const streamHandler = {
+            onContent: async (content, isFinal, xhr) => {
+                updateLastAnswer(content, conversationNo, isFinal, xhr)
+            },
+            onDone(xhr) {
+                console.log("Done!");
+            },
+            onError(error, status, xhr) {
+                console.error(error);
+            },
+        }
+        return streamHandler
+    }
+
     const handleSubmit = async (prompt) => {
         try {
             setPromptIsActive(false);
             const conversationWithPrompt = [...conversation, { role: "user", content: prompt }];
-            setConversation(conversationWithPrompt);
+            const conversationWIthPromptAndPreliminaryAnswers = addPreliminaryAnswers(conversationWithPrompt);
+            setConversation(conversationWIthPromptAndPreliminaryAnswers);
 
             const extraxtedConversation0 = extractConversation(0, conversationWithPrompt)
             const extraxtedConversation1 = extractConversation(1, conversationWithPrompt)
@@ -51,10 +98,10 @@ const AiInteractionDouble = () => {
             const model_id1 = separateModelEndpoint(modelAndEndpoints[1]).model_id
             const endpoint_id1 = separateModelEndpoint(modelAndEndpoints[1]).endpoint_id
 
-            const [generatedAnswer0, generatedAnswer1] = await Promise.all([generateText({ conversation: extraxtedConversation0, model_id: model_id0, endpoint_id: endpoint_id0 }), generateText({ conversation: extraxtedConversation1, model_id: model_id1, endpoint_id: endpoint_id1 })])
+            const [generatedAnswer0, generatedAnswer1] = await Promise.all([
+                generateText({ conversation: extraxtedConversation0, model_id: model_id0, endpoint_id: endpoint_id0, handler: createResponseStreamHandler(0) }),
+                generateText({ conversation: extraxtedConversation1, model_id: model_id1, endpoint_id: endpoint_id1, handler: createResponseStreamHandler(1) })])
 
-            // const generatedAnswer0 = await generateText({ conversation: extraxtedConversation0, model_id: model_id0, endpoint_id: endpoint_id0 });
-            // const generatedAnswer1 = await generateText({ conversation: extraxtedConversation1, model_id: model_id1, endpoint_id: endpoint_id1 });
             const conversationWithAnswers = [...conversationWithPrompt, { role: "assistant0", content: generatedAnswer0.content, fullResponse: generatedAnswer0 }, { role: "assistant1", content: generatedAnswer1.content, fullResponse: generatedAnswer1 }];
             setConversation(conversationWithAnswers);
             setPromptIsActive(true);
@@ -85,14 +132,9 @@ const AiInteractionDouble = () => {
                 <ModelSelector models={availableModels} onSelect={handleModelChange(1)} disabled={false} />
             </div>
             <Conversation conversation={conversation} />
-            {/* <div>
-                <div className="conversation">
-                    {conversation.map((entry, index) => ConversationEntry(entry, index, getToggleOpen(index)))}
-                </div>
-            </div> */}
             <Prompt onSubmit={handleSubmit} promptIsActive={promptIsActive} />
         </div >
     );
 };
 
-export default AiInteractionDouble;
+export default AiInteraction;

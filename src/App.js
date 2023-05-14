@@ -1,5 +1,5 @@
 import './App.css';
-import AiInteractionDouble from './AiInteractionDouble';
+import AiInteraction from './AiInteraction';
 import Log from './Log';
 import robots from './robots.png';
 
@@ -13,7 +13,7 @@ function App() {
         </h1>
       </header>
       <main>
-        <AiInteractionDouble />
+        <AiInteraction />
       </main>
       <Log />
     </div>

@@ -18,6 +18,9 @@ const Prompt = ({ promptIsActive, onSubmit }) => {
         onSubmit(prompt);
         setPrompt(''); // Clear the textarea after submitting
     };
+    const promptStyle = {
+        textAlign: 'left'
+    }
 
     return (<>
         <ThemeProvider theme={flatTheme}>
@@ -29,8 +32,8 @@ const Prompt = ({ promptIsActive, onSubmit }) => {
                 onChange={handleChange}
                 rows="5"
                 cols="70"
-                disabled={!promptIsActive
-                }
+                disabled={!promptIsActive}
+                style={promptStyle}
             />
             < br />
             <Button label="Submit" onClick={handleSubmit} disabled={!promptIsActive} />

@@ -1,5 +1,6 @@
 import { models } from './OpenaiModels';
 import { endpoints } from './OpenaiEndpoints';
+import { OpenAIExt } from "openai-ext";
 
 const OPENAI_API_BASE_URL = 'https://api.openai.com'
 
@@ -14,7 +15,7 @@ if (!API_KEY) {
     API_KEY = userInput
 }
 
-const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey = API_KEY }) => {
+const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey }) => {
     if (prompt === undefined) {
         log("Error: Cannot use Completion Endpoint without prompt.", "buildRequestForCompletionEndpoint")
         return
@@ -47,7 +48,7 @@ const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey = API_KEY 
 }
 
 
-const buildRequestForChatCompletionEndpoint = ({ messages, model_id, apiKey = API_KEY }) => {
+const buildRequestForChatCompletionEndpoint = ({ messages, model_id, apiKey }) => {
     if (messages === undefined) {
         log("Error: Cannot use Completion Endpoint without messages.", "buildRequestForCompletionEndpoint")
         return
@@ -82,22 +83,56 @@ const buildRequestForChatCompletionEndpoint = ({ messages, model_id, apiKey = AP
 const extractAnswerForChatCompletionEndpoint = (data) => data.choices[0].message.content.trim()
 const extractAnswerForCompletionEndpoint = (data) => data.choices[0].text.trim()
 
-export const generateText = async ({ conversation, model_id, apiKey = API_KEY, endpoint_id = "chat_completions" }) => {
+export const generateText = async ({ conversation, model_id, apiKey = API_KEY, endpoint_id, handler = null }) => {
+    if (handler === null) {
+        return generateTextWithoutHandler({ conversation, model_id, apiKey, endpoint_id })
+    } else {
+        return generateTextWithHandler({ conversation, model_id, apiKey, endpoint_id, handler })
+    }
+}
+
+const generateTextWithHandler = async ({ conversation, model_id, apiKey, endpoint_id, handler }) => {
+    if (endpoint_id !== "chat_completions") {
+        const errorText = `Endpoint ${endpoint_id} is not supported with handlers.`
+        log(`Error: ${errorText}`, "generateText")
+        throw new Error(errorText);
+    }
+    const streamConfig = {
+        apiKey: apiKey,
+        handler: handler,
+    }
+
+    const xhr = OpenAIExt.streamClientChatCompletion(
+        {
+            model: model_id,
+            messages: extractMessagesFromConversation(conversation),
+        },
+        streamConfig
+    );
+
+    return xhr
+};
+
+const extractMessagesFromConversation = (conversation) => {
+    const messages = conversation.map((item) => {
+        return {
+            role: item.role,
+            content: item.content,
+        };
+    });
+    return messages
+}
+
+const generateTextWithoutHandler = async ({ conversation, model_id, apiKey, endpoint_id }) => {
     let requestOptions;
     let requestUrl;
     let extractor;
     switch (endpoint_id) {
         case "chat_completions":
-            {// Transfor conversation to messages
-                const messages = conversation.map((item) => {
-                    return {
-                        role: item.role,
-                        content: item.content,
-                    };
-                });
+            {
                 const options = {
                     model_id,
-                    messages,
+                    messages: extractMessagesFromConversation(conversation),
                     apiKey: apiKey ? apiKey : API_KEY
                 }
                 requestOptions = buildRequestForChatCompletionEndpoint(options)

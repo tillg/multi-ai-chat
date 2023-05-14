@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from "@com.mgmtp.a12.widgets/widgets-core/lib/icon";
 import { Comment, CommentList } from "@com.mgmtp.a12.widgets/widgets-core/lib/comment";
+import { MarkdownComment } from './MarkdownComment';
 import { ThemeProvider } from "styled-components";
 import { flatTheme } from "@com.mgmtp.a12.widgets/widgets-core/lib/theme/flat/flat-theme";
 import "@com.mgmtp.a12.widgets/widgets-core/lib/theme/basic.css";
@@ -10,7 +11,12 @@ const regex = /\d+/;
 const Conversation = ({ conversation }) => {
 
     const createComment = (entry, index) => {
-        const author = entry.role === "user" ? "User" : entry.fullResponse.fullResponse.model
+        let author
+        if (entry.fullResponse && entry.fullResponse.fullResponse) {
+            author = entry.role === "user" ? "User" : entry.fullResponse.fullResponse.model
+        } else {
+            author = entry.role === "user" ? "User" : "???"
+        }
         const icon = entry.role === "user" ? "person" : "smart_toy"
         const action = entry.role === "user" ? "wrote" : "answered"
         const assistantNo = entry.role.match(regex);
@@ -26,19 +32,19 @@ const Conversation = ({ conversation }) => {
         }
 
         return (
-            <Comment commentMeta={commentMeta} key={index} style={commentStyle} >
+            <MarkdownComment commentMeta={commentMeta} key={index} style={commentStyle} >
                 {entry.content}
-            </Comment >
+            </MarkdownComment >
         )
     }
 
-    const createCommentGroup = (commentGroup) => {
+    const createCommentGroup = (commentGroup, index) => {
         const containerStyle = {
             display: 'flex'
         };
         return (
-            <div style={containerStyle}>
-                {commentGroup.map((entry, index) => createComment(entry))}
+            <div style={containerStyle} key={index}>
+                {commentGroup.map((entry, index) => createComment(entry, index))}
             </div>
         )
     }
@@ -65,7 +71,7 @@ const Conversation = ({ conversation }) => {
 
         return (
             <>
-                {allComments.map((commentGroup) => createCommentGroup(commentGroup))}
+                {allComments.map((commentGroup, index) => createCommentGroup(commentGroup, index))}
             </>
         )
     }
