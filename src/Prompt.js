@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from "styled-components";
-import { GlobalStyles } from "@com.mgmtp.a12.widgets/widgets-core/lib/theme/base";
 import { flatTheme } from "@com.mgmtp.a12.widgets/widgets-core/lib/theme/flat/flat-theme";
 import "@com.mgmtp.a12.widgets/widgets-core/lib/theme/basic.css";
 import { TextAreaStateless } from "@com.mgmtp.a12.widgets/widgets-core/lib/input/text-area";

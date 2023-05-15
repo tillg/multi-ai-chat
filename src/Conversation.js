@@ -1,4 +1,3 @@
-import React from 'react';
 import { Icon } from "@com.mgmtp.a12.widgets/widgets-core/lib/icon";
 import { CommentList } from "@com.mgmtp.a12.widgets/widgets-core/lib/comment";
 import { MarkdownComment } from './MarkdownComment';

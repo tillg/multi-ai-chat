@@ -5,6 +5,8 @@ const ModelSelector = ({ models, onSelect, disabled }) => {
         onSelect(e.target.value);
     };
 
+    if (!models) return (<div>Loading...</div>)
+
     return (
         <div>
             <select onChange={handleModelChange} disabled={disabled}>

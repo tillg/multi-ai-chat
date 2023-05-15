@@ -45,9 +45,19 @@ Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+
 ## To Do
 
-* See the result as it comes in from the AI.
-* Use A12 Widgets
+* Pass the models to compare via URL
+* Make sure that in the build & publishing process the API Key is not published.
+* Come up with proper error messages, for example when the API key is not set or not accepted
+* Store OPENAI_KEY, selected models and passed dialogues in local DB
+* Add time measurement and dispaly ait
+* Use A12 Widgets only
 * Ability to enter specific configurations (i.e. being able to compare GPT-4 with temperature 0 vs temperature 1)
 * Check tokens vs rate limits so messages don't get too long
+
+## Done
+* 2023-05-16: Pass the OPENAI_KEY and the models to compare via URL
+* 2023-05-14: See the result as it comes in from the AI.
+* 2023-05-13: Started using A12 Widgets

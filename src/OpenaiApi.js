@@ -4,16 +4,10 @@ import { OpenAIExt } from "openai-ext";
 
 const OPENAI_API_BASE_URL = 'https://api.openai.com'
 
-let API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 const MAX_TOKENS = 800
 const TEMPERATURE = 0.7
 
 let availableModels = []
-
-if (!API_KEY) {
-    const userInput = prompt("Please enter your OpenAI API key:", "sk-<your key here>");
-    API_KEY = userInput
-}
 
 const buildRequestForCompletionEndpoint = ({ prompt, model_id, apiKey }) => {
     if (prompt === undefined) {
@@ -83,7 +77,7 @@ const buildRequestForChatCompletionEndpoint = ({ messages, model_id, apiKey }) =
 const extractAnswerForChatCompletionEndpoint = (data) => data.choices[0].message.content.trim()
 const extractAnswerForCompletionEndpoint = (data) => data.choices[0].text.trim()
 
-export const generateText = async ({ conversation, model_id, apiKey = API_KEY, endpoint_id, handler = null }) => {
+export const generateText = async ({ conversation, model_id, apiKey, endpoint_id, handler = null }) => {
     if (handler === null) {
         return generateTextWithoutHandler({ conversation, model_id, apiKey, endpoint_id })
     } else {
@@ -133,7 +127,7 @@ const generateTextWithoutHandler = async ({ conversation, model_id, apiKey, endp
                 const options = {
                     model_id,
                     messages: extractMessagesFromConversation(conversation),
-                    apiKey: apiKey ? apiKey : API_KEY
+                    apiKey
                 }
                 requestOptions = buildRequestForChatCompletionEndpoint(options)
                 const endpoint = endpoints.find((element) => element.endpoint_id === "chat_completions");
@@ -148,7 +142,7 @@ const generateTextWithoutHandler = async ({ conversation, model_id, apiKey, endp
                 const options = {
                     model_id,
                     prompt,
-                    apiKey: apiKey ? apiKey : API_KEY
+                    apiKey
                 }
                 requestOptions = buildRequestForCompletionEndpoint(options)
                 const endpoint = endpoints.find((element) => element.endpoint_id === "completions");
@@ -195,7 +189,7 @@ export const separateModelEndpoint = (modelAndEndpoint) => {
     return { model_id, endpoint_id }
 }
 
-export const getAvailableModels = async () => {
+export const getAvailableModels = () => {
     if (availableModels.length > 0) return availableModels;
 
     availableModels = []

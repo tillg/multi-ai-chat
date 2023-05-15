@@ -1,32 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { generateText, getAvailableModels, separateModelEndpoint } from './OpenaiApi';
+import React, { useState, useContext } from 'react';
+import { generateText, separateModelEndpoint } from './OpenaiApi';
 import './AiInteraction.css';
 import Prompt from './Prompt';
 import ModelSelector from './ModelSelector';
 import Conversation from './Conversation';
-
+import { AppContext } from "./App";
 
 const AiInteraction = () => {
+    const [contextState] = useContext(AppContext);
     const [modelAndEndpoints, setModelAndEndpoints] = useState(["none", "none"]);
-    const [availableModels, setAvailableModels] = useState([]);
     const [conversation, setConversation] = useState([]);
     const [promptIsActive, setPromptIsActive] = useState(false);
-
-    useEffect(() => {
-        const fetchAvailableModels = async () => {
-            // console.log('GPT4Interaction.useEffect.fetchAvailableModels', 'Fetching models...')
-            try {
-                const models = await getAvailableModels();
-                // console.log('GPT4Interaction.useEffect.fetchAvailableModels', `Available models: ${models.length}`);
-                setAvailableModels(models);
-                // setModelAndEndpoints(models[0]);
-            } catch (error) {
-                console.error(`Error fetching available models:  ${error}`);
-            }
-        };
-
-        fetchAvailableModels();
-    }, []);
 
     const extractConversation = (conversationNo, conversation) => {
         const conversationOfAssistant = conversation.filter((entry) => entry.role === "user" || entry.role === `assistant${conversationNo}`)
@@ -143,6 +127,7 @@ const AiInteraction = () => {
         });
     };
 
+    const availableModels = contextState.availableModels
     return (
         <div>
             <div className="selectors-container">
