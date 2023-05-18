@@ -57,6 +57,7 @@ const AiInteraction = () => {
                         } catch (e) {
                             console.error(e);
                             console.error(`Bad data JSON: \`${dataJson}\``);
+                            parsed = e.type
                         }
                         return parsed
                     });
@@ -81,6 +82,7 @@ const AiInteraction = () => {
             },
             onError(error, status, xhr) {
                 console.error(error);
+                updateLastAnswer("**Error!** 💥 \nPlease check the console logs.", conversationNo, true, xhr)
             },
         }
         return streamHandler
@@ -101,8 +103,8 @@ const AiInteraction = () => {
             const endpoint_id1 = separateModelEndpoint(modelAndEndpoints[1]).endpoint_id
 
             const [generatedAnswer0, generatedAnswer1] = await Promise.all([
-                generateText({ conversation: extraxtedConversation0, model_id: model_id0, endpoint_id: endpoint_id0, handler: createResponseStreamHandler(0) }),
-                generateText({ conversation: extraxtedConversation1, model_id: model_id1, endpoint_id: endpoint_id1, handler: createResponseStreamHandler(1) })])
+                generateText({ conversation: extraxtedConversation0, model_id: model_id0, apiKey: contextState.OPENAI_API_KEY, endpoint_id: endpoint_id0, handler: createResponseStreamHandler(0) }),
+                generateText({ conversation: extraxtedConversation1, model_id: model_id1, apiKey: contextState.OPENAI_API_KEY, endpoint_id: endpoint_id1, handler: createResponseStreamHandler(1) })])
 
             const conversationWithAnswers = [...conversationWithPrompt, { role: "assistant0", content: generatedAnswer0.content, fullResponse: generatedAnswer0 }, { role: "assistant1", content: generatedAnswer1.content, fullResponse: generatedAnswer1 }];
             setConversation(conversationWithAnswers);

@@ -30,6 +30,7 @@ const App = () => {
     } else if (!OPENAI_API_KEY) {
       OPENAI_API_KEY = prompt("Please enter your OpenAI API key:", "sk-<your key here>");
     }
+    console.log(`Using OpenAI API key: ${OPENAI_API_KEY}`)
     if (!OPENAI_API_KEY) {
       const error = "Error: Cannot use OpenAi without API Key."
       console.error(error)
@@ -62,6 +63,7 @@ const App = () => {
         <main>
           <AiInteraction />
         </main>
+        Version 0.1.0
       </div>
     </AppContext.Provider>
 

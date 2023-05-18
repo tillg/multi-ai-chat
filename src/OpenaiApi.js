@@ -88,7 +88,7 @@ export const generateText = async ({ conversation, model_id, apiKey, endpoint_id
 const generateTextWithHandler = async ({ conversation, model_id, apiKey, endpoint_id, handler }) => {
     if (endpoint_id !== "chat_completions") {
         const errorText = `Endpoint ${endpoint_id} is not supported with handlers.`
-        console.error("generateText", errorText)
+        console.log("generateText", errorText)
         throw new Error(errorText);
     }
     const streamConfig = {
@@ -202,7 +202,7 @@ export const getAvailableModels = () => {
                     const modelEndpoint = combineModelEndpoint(model.model_id, endpoint_id)
                     availableModels.push(modelEndpoint)
                 } else {
-                    console.error(`Endpoint ${endpoint_id} is not supported (yet).`)
+                    console.log(`Endpoint ${endpoint_id} is not supported (yet).`)
                 }
             })
         }
