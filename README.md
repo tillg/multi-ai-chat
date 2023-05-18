@@ -12,6 +12,19 @@ REACT_APP_OPENAI_API_KEY=<Your API key>
 
 Call it with `source .env` and then run the app with `npm start`.
 
+## Creating a new version
+
+Once you have coded the changes that make up a new version you can create a new version with the following steps:
+
+```bash
+npm version patch
+# or nom version minor
+# or nom version major
+git add --all
+git commit -m "Commit message"
+git push
+```
+
 ## Reading 
 
 ### API Usage
