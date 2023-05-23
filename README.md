@@ -17,13 +17,15 @@ Call it with `source .env` and then run the app with `npm start`.
 Once you have coded the changes that make up a new version you can create a new version with the following steps:
 
 ```bash
-npm version patch
-# or nom version minor
-# or nom version major
 git add --all
 git commit -m "Commit message"
 git push
+npm version patch
+# or nom version minor
+# or nom version major
 ```
+
+The `npm version patch` command automatically bumps the version in `package.json` and creates a new git tag. It also pushes the new tag to the remote repository.
 
 ## Reading 
 
