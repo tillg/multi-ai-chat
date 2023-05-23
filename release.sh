@@ -19,17 +19,17 @@ if [ $result -eq 0 ]; then
 fi
 
 # Get commit message of that release
-commit_message = $(./gh_getCommitMessage.sh "$release")
+# commit_message = $(./gh_getCommitMessage.sh "$release")
 
 # check if there were any errors
-if [ $? -ne 0 ]; then
-    echo "Error while retrieving commit message."
-    echo "Aborting the release process."
-    exit 1
-fi
+# if [ $? -ne 0 ]; then
+#     echo "Error while retrieving commit message."
+#     echo "Aborting the release process."
+#     exit 1
+# fi
 
-
+npm build
 
 rm build.zip
 zip -r build.zip build
-gh release create "$release" --notes "MVP" build.zip
+gh release create "$release"  build.zip
