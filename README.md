@@ -19,7 +19,6 @@ Once you have coded the changes that make up a new version you can create a new 
 ```bash
 git add --all
 git commit -m "Commit message"
-git push
 npm version patch
 # or nom version minor
 # or nom version major
