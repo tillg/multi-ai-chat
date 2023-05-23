@@ -3,6 +3,9 @@ import React, { createContext, useState, useEffect } from "react";
 import { getAvailableModels } from './OpenaiApi';
 import AiInteraction from './AiInteraction';
 import robots from './robots.png';
+import packageJSON from '../package.json';
+const version = packageJSON.version;
+const buildDate = process.env.REACT_APP_BUILD_DATE;
 
 // Create the context
 export const AppContext = createContext();
@@ -63,7 +66,7 @@ const App = () => {
         <main>
           <AiInteraction />
         </main>
-        Version `{process.env.APP_VERSION}` (0.1.6)
+        <p className="version-text">Version: {version}  | Built at: {buildDate} </p>
       </div>
     </AppContext.Provider>
 

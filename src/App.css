@@ -44,3 +44,9 @@
     transform: rotate(360deg);
   }
 }
+
+.version-text {
+  font-size: 12px;
+  /* Adjust the font size to your preference */
+  text-align: right;
+}
