@@ -63,7 +63,7 @@ const App = () => {
         <main>
           <AiInteraction />
         </main>
-        Version `{process.env.APP_VERSION}`
+        Version `{process.env.APP_VERSION}` (0.1.6)
       </div>
     </AppContext.Provider>
 
