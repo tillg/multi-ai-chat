@@ -4,7 +4,14 @@ A chat application that allows users to chat with multiple AIs in order to compa
 
 ## Running the app
 
-First get an OpenAI API key [here](https://platform.openai.com/account/api-keys). Then make a `.env` file liek so:
+In order to run the app you need to have an OpenAI API key (get it [here](https://platform.openai.com/account/api-keys)). Once you have a key got [here](https://tillg.github.io/multi-ai-chat/). If you want to avoid entering the OpenAI-Key every time you load the page, you can also add it to the URL like this:
+
+`https://https://tillg.github.io/multi-ai-chat/?OPENAI_API_KEY=sk-xyz`
+
+
+### Run the app locally
+
+Make a `.env` file:
 
 ```bash
 REACT_APP_OPENAI_API_KEY=<Your API key>
@@ -25,6 +32,18 @@ npm version patch
 ```
 
 The `npm version patch` command automatically bumps the version in `package.json` and creates a new git tag. It also pushes the new tag to the remote repository.
+
+In order to publish a version:
+
+```bash
+# Make sure the version is tagged
+# Build it
+npm run build
+
+# Simply committing & pushing will make it available under https://tillg.github.io/multi-ai-chat/
+git commit -m "Built version"
+git push
+````
 
 ## Reading 
 

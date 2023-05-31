@@ -4,6 +4,10 @@ import { getAvailableModels } from './OpenaiApi';
 import AiInteraction from './AiInteraction';
 import robots from './robots.png';
 import packageJSON from '../package.json';
+import { ThemeProvider } from "styled-components";
+import { flatTheme } from "@com.mgmtp.a12.widgets/widgets-core/lib/theme/flat/flat-theme";
+import { GlobalStyles } from "@com.mgmtp.a12.widgets/widgets-core/lib/theme/base";
+
 const version = packageJSON.version;
 const buildDate = process.env.REACT_APP_BUILD_DATE;
 
@@ -56,18 +60,23 @@ const App = () => {
 
   return (
     <AppContext.Provider value={[contextState, setContextState]}>
-      <div className="App">
-        <header className="App-header">
-          <h1>
-            <img src={robots} alt="Robots" className="App-logo" />{' '}
-            Double AI Chat
-          </h1>
-        </header>
-        <main>
-          <AiInteraction />
-        </main>
-        <p className="version-text">Version: {version}  | Built at: {buildDate} </p>
-      </div>
+      <ThemeProvider theme={flatTheme}>
+        <GlobalStyles />
+
+        <div className="App">
+          <header className="App-header">
+            <h1>
+              <img src={robots} alt="Robots" className="App-logo" />{' '}
+              Double AI Chat
+            </h1>
+          </header>
+          <main>
+            <AiInteraction />
+          </main>
+          <p className="version-text">Version: {version}  | Built at: {buildDate} </p>
+        </div>
+
+      </ThemeProvider>
     </AppContext.Provider>
 
   );
