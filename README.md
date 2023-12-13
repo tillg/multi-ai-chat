@@ -41,6 +41,7 @@ In order to publish a version:
 npm run build
 
 # Simply committing & pushing will make it available under https://tillg.github.io/multi-ai-chat/
+git add --all
 git commit -m "Built version"
 git push
 ````
